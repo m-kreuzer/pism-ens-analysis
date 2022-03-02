@@ -81,10 +81,10 @@ def get_reference_data(input_root_dir, grid_id):
 
     # swap orientation
     rignot_velsurf_mag = rignc.variables["v_magnitude"][::-1,:]
-    # simplify velocities, set masked areas at the domain boundaries to zero.
-    msk = rignot_velsurf_mag.mask
+    ## simplify velocities, set masked areas at the domain boundaries to zero.
+    #msk = rignot_velsurf_mag.mask
     rignot_velsurf_mag = np.array(rignot_velsurf_mag)
-    rignot_velsurf_mag[msk] = 0.
+    #rignot_velsurf_mag[msk] = 0.
 
     rignc.close()
     bedmnc.close()
