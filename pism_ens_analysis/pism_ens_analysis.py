@@ -120,7 +120,7 @@ def get_run_with_val(tsdata, variable, year, func=np.min):
 
 def get_data_on_maskval_above_threshold(data, mask, maskval, threshold):
 
-    """ create a field that is nonly nonzero where mask==maskval
+    """ create a field that is only nonzero where mask==maskval
         field larger then threshold. Return this field.
         This function is useful, for example, to extract grounded velocities
         that are larger than X meter per year.
@@ -202,7 +202,7 @@ def get_grounding_line_deviaton(pism_mask, distance_to_observed_gl, basins, basi
     if basin_range=="all":
         basin_range = np.arange(1,basins.max()+1)
 
-    # Find contours at a constant value of 0.9
+    # Find contours at a constant value of 0.0
     contours = measure.find_contours(glmask, 0.0)
 
     # largest contour: continental Antarctica
