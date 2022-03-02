@@ -227,9 +227,13 @@ def get_grounding_line_deviaton(pism_mask, distance_to_observed_gl, basins, basi
         # square-root sum of distances divided by number of grounding line points
         #return np.sqrt((gldist**2.).sum())/(gldist > 0).sum()
         #return np.sqrt( (gldist**2.).sum() / (gldist != 0).sum() )
-        return np.sqrt(gldist**2.).sum() / (gldist != 0).sum() 
-	
 
+        #return ( (np.sqrt(gldist**2.)).sum() / (gldist != 0).sum() )
+        #return  np.sqrt(np.abs(gldist**2)).sum() / (gldist != 0).sum()
+
+        # root-mean-square deviation of distances
+        return  np.sqrt( np.abs(gldist**2).sum() / (gldist != 0).sum() )
+	
     gl_per_basin.loc["total"] = weighted_gl_devi(gldist)
 
     for bs in basin_range:
