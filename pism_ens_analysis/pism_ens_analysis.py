@@ -199,8 +199,8 @@ def get_area_errors(pism_mask, bedm_mask,resolution):
 def get_grounding_line_deviaton(pism_mask, distance_to_observed_gl, basins, basin_range="all"):
 
     glmask = pism_mask.copy()
-    glmask[glmask <= 2] = -1
-    glmask[glmask > 2] = 1
+    glmask[glmask <= 2] = -1    # grounded
+    glmask[glmask > 2] = 1      # floating/ocean
 
     if basin_range=="all":
         basin_range = np.arange(1,basins.max()+1)
@@ -247,8 +247,8 @@ def get_distance_to_observed_gl(bedm_mask, resolution):
 
     # format observation mask
     glmaskobs = bedm_mask.copy()
-    glmaskobs[glmaskobs <= 0] = -1
-    glmaskobs[glmaskobs > 0] = 1
+    glmaskobs[glmaskobs <= 0] = -1      # grounded
+    glmaskobs[glmaskobs > 0] = 1        # floating/ocean
     # calculate distance to the grounding line
     # skffm calculates distance to the zero contour line
     distanceobs = skfmm.distance(glmaskobs)*resolution #km
