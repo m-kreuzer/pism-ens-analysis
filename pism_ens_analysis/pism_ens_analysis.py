@@ -133,7 +133,7 @@ def get_data_on_maskval_above_threshold(data, mask, maskval, threshold):
     return threshdata
 
 
-def get_sum_per_basin(field, basins, basin_range="all",
+def get_sum_per_basin(field, basins, basin_range="all", add_mean=False,
                      weigh_by_size=False):
 
     """ loop over basins from basin_range and sum up the cells
@@ -144,13 +144,16 @@ def get_sum_per_basin(field, basins, basin_range="all",
     if basin_range=="all":
         basin_range = np.arange(1,basins.max()+1)
 
-    sum_per_basin = pd.Series(index=basin_range)
+    sum_per_basin = pd.Series(index=basin_range, dtype=np.float64)
 
     for bs in basin_range:
         sum_per_basin.loc[bs] = field[bs==basins].sum()
 
         if weigh_by_size:
             sum_per_basin.loc[bs] /= (basins==bs).sum()
+
+    if add_mean:
+        sum_per_basin.loc['mean'] = sum_per_basin.mean()
 
     return sum_per_basin
 
@@ -209,14 +212,14 @@ def get_grounding_line_deviaton(pism_mask, distance_to_observed_gl, basins, basi
     contour = sorted(contours, key=len)[-1]
 
     # create indices to access 2d distance_to_observed_gl
-    indices = np.array(contour,dtype=np.int)
+    indices = np.array(np.round(contour),dtype=np.int)
     # only have each cell once
     indices = np.unique(indices,axis=0)
 
     gldist = np.zeros_like(distance_to_observed_gl)
     gldist[indices[:,0],indices[:,1]] = distance_to_observed_gl[indices[:,0],indices[:,1]]
 
-    gl_per_basin = pd.Series(index=basin_range)
+    gl_per_basin = pd.Series(index=basin_range, dtype=np.float64)
 
     def weighted_gl_devi(gldist):
 
